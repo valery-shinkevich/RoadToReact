@@ -1,3 +1,7 @@
+# My road to React
+
+Learn React by this book https://github.com/the-road-to-learn-react/the-road-to-learn-react
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
