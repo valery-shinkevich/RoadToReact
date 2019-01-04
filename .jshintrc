@@ -1,0 +1,11 @@
+{
+    "esversion": 6,
+    "boss":      false,
+    "node":      true,
+    "eqeqeq":    true,
+    "strict":    true,
+    "undef":     true,
+    "unused":    true,
+    "onecase":   true,
+    "lastsemic": true
+  }
