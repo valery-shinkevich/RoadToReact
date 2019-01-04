@@ -28,8 +28,9 @@ const list = [
   }
 ];
 
-const Search = ({value,onChange}) => 
+const Search = ({value,onChange,children}) => 
   <form>
+    <span>{children}</span>
     <input type="text" value={value} onChange={onChange} />
   </form>;
 
@@ -79,7 +80,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Search value={searchTerm} onChange={this.onSearchChange} />
+        <Search value={searchTerm} onChange={this.onSearchChange}>Поиск</Search>
         <Table list={list} pattern={searchTerm} onDismiss={this.onDismiss}/>       
       </div>
     );
