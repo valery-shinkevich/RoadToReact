@@ -18,7 +18,7 @@ const Table = ({list, pattern, onDismiss}) => list
         <span>{item.num_comments}</span>
         <span>{item.points}</span>
         <span>
-        <Button onClick={onHandleDismiss}>X</Button>
+        <Button onClick={onHandleDismiss} className="dismiss">X</Button>
         </span>
     </div>
     );
