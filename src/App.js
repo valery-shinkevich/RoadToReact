@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import Button from './Button'
 
 const list = [
   {
@@ -51,7 +52,7 @@ const Table = ({list, pattern, onDismiss}) => list
         <span>{item.num_comments}</span>
         <span>{item.points}</span>
         <span>
-          <button onClick={onHandleDismiss} type="button">X</button>
+          <Button onClick={onHandleDismiss}>X</Button>
         </span>
       </div>
     );
@@ -68,6 +69,7 @@ class App extends Component {
     };
 
     this.onSearchChange = this.onSearchChange.bind(this);
+    this.onDismiss = this.onDismiss.bind(this);
   }
 
   onSearchChange(event){
