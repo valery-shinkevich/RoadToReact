@@ -4,6 +4,11 @@ import Search from './Search'
 import Table from './Table'
 import DemoData from './DemoData'
 
+const DEFAULT_QUERY = 'redux';
+const PATH_BASE = 'https://hn.algolia.com/api/v1';
+const PATH_SEARCH = '/search';
+const PARAM_SEARCH = 'query=';
+
 class App extends Component {
   
   constructor(props) {
@@ -11,9 +16,11 @@ class App extends Component {
 
     this.state = {
       list: DemoData,
-      searchTerm: '',
+      result: null,
+      searchTerm: DEFAULT_QUERY,
     };
 
+    this.setSearchTopStories = this.setSearchTopStories.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onDismiss = this.onDismiss.bind(this);
   }
@@ -22,9 +29,25 @@ class App extends Component {
     this.setState({searchTerm: event.target.value});
   }
 
+  setSearchTopStories(result) {
+    this.setState({ result });
+  }
+
+  componentDidMount() {
+    const { searchTerm } = this.state;
+    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
+    .then(response => response.json())
+    .then(result => this.setSearchTopStories(result))
+    .catch(error => error);
+  }
+
   render() {
 
-    const {list, searchTerm} = this.state;
+    const {searchTerm, result} = this.state;
+
+    console.log(result);
+    
+    const list = !result ? DemoData : result.hits;
 
     return (
       <div className="page">
