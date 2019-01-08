@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import "./App.css";
 import Search from './Search';
 import Table from './Table';
+import Button from './Button';
 
 const DEFAULT_QUERY = 'redux';
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
+const PARAM_PAGE = 'page=';
 
 class App extends Component {
   
@@ -14,7 +16,6 @@ class App extends Component {
     super(props);
 
     this.state = {
-      list: null,
       result: null,
       searchTerm: DEFAULT_QUERY,
     };
@@ -38,7 +39,15 @@ onSearchSubmit(event){
   }
 
   setSearchTopStories(result) {
-    this.setState({ result });
+    const {hits, page} = result;
+    const oldHits = page!==0
+      ? this.state.result.hits
+      : [];
+    const updatedHits = [
+      ...oldHits,
+      ...hits
+    ];
+    this.setState({ result: {...result, hits: updatedHits}, page });
   }
 
   componentDidMount() {
@@ -46,17 +55,17 @@ onSearchSubmit(event){
     this.fetchSearchTopStories(searchTerm)
   }
 
-  fetchSearchTopStories(searchTerm){
-    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
+  fetchSearchTopStories(searchTerm, page =  0){
+    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`)
     .then(response => response.json())
     .then(result => this.setSearchTopStories(result))
     .catch(error => error);
   }
 
   render() {
-
-    const {searchTerm, result} = this.state;
-
+    const { searchTerm, result } = this.state;
+    const page = (result && result.page) || 0;
+    
     console.log(result);
     
     return (
@@ -75,6 +84,11 @@ onSearchSubmit(event){
             onDismiss={this.onDismiss}
           />
         }
+        <div className="interactions">
+          <Button onClick={() => this.fetchSearchTopStories(searchTerm, page + 1)}>
+            Больше историй
+          </Button>
+        </div>
       </div>
     );
   }
