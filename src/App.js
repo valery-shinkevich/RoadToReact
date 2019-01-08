@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
-import Search from './Search'
-import Table from './Table'
-import DemoData from './DemoData'
-import { Object } from "core-js";
+import Search from './Search';
+import Table from './Table';
 
 const DEFAULT_QUERY = 'redux';
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
@@ -16,7 +14,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      list: DemoData,
+      list: null,
       result: null,
       searchTerm: DEFAULT_QUERY,
     };
@@ -48,12 +46,10 @@ class App extends Component {
 
     console.log(result);
     
-    const list = !result ? DemoData : result.hits;
-
     return (
       <div className="page">
         <div className="interactions"><Search value={searchTerm} onChange={this.onSearchChange}>Поиск</Search></div>
-        <Table list={list} pattern={searchTerm} onDismiss={this.onDismiss}/>       
+        {result && <Table list={result.hits} pattern={searchTerm} onDismiss={this.onDismiss}/>}
       </div>
     );
   }
