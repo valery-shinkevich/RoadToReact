@@ -3,6 +3,7 @@ import "./App.css";
 import Search from './Search'
 import Table from './Table'
 import DemoData from './DemoData'
+import { Object } from "core-js";
 
 const DEFAULT_QUERY = 'redux';
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
@@ -59,8 +60,14 @@ class App extends Component {
 
   onDismiss(id) {
     const isNotId = item => item.objectID !== id;
-    const updatedList = this.state.list.filter(isNotId);
-    this.setState({ list: updatedList });
+    const current = this.state.result
+    const updatedHits = current.hits.filter(isNotId);
+    this.setState({
+      result: { 
+        ...current,
+        hits: updatedHits
+      }
+    });
   }
 }
 
