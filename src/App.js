@@ -21,10 +21,19 @@ class App extends Component {
 
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
+    this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
     this.onDismiss = this.onDismiss.bind(this);
   }
 
+onSearchSubmit(event){
+  const {searchTerm} = this.state;
+  this.fetchSearchTopStories(searchTerm);
+  event.preventDefault();
+}
+
   onSearchChange(event){
+    console.log(event);
     this.setState({searchTerm: event.target.value});
   }
 
@@ -34,6 +43,10 @@ class App extends Component {
 
   componentDidMount() {
     const { searchTerm } = this.state;
+    this.fetchSearchTopStories(searchTerm)
+  }
+
+  fetchSearchTopStories(searchTerm){
     fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
     .then(response => response.json())
     .then(result => this.setSearchTopStories(result))
@@ -48,8 +61,20 @@ class App extends Component {
     
     return (
       <div className="page">
-        <div className="interactions"><Search value={searchTerm} onChange={this.onSearchChange}>Поиск</Search></div>
-        {result && <Table list={result.hits} pattern={searchTerm} onDismiss={this.onDismiss}/>}
+        <div className="interactions">
+          <Search
+            value={searchTerm}
+            onChange={this.onSearchChange}
+            onSubmit={this.onSearchSubmit}>
+          Поиск
+          </Search>
+        </div>
+        {result && 
+          <Table
+            list={result.hits}
+            onDismiss={this.onDismiss}
+          />
+        }
       </div>
     );
   }

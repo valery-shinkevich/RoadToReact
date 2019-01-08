@@ -1,8 +1,6 @@
 import React from 'react'
 import Button from './Button'
 
-const termFilter = term => ({title}) => term === '' || title.toLowerCase().includes(term.toLowerCase());
-
 const largeColumn = {
     width: '40%',
 };
@@ -15,10 +13,9 @@ const smallColumn = {
     width: '10%',
 };
 
-const Table = ({list, pattern, onDismiss}) => 
+const Table = ({list, onDismiss}) => 
     <div className="table">{
         list
-            .filter(termFilter(pattern))
             .map(item => {
             const onHandleDismiss = () => onDismiss(item.objectID);
             return (
