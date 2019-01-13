@@ -18,84 +18,13 @@ class App extends Component {
 
   _isMounted = false
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
+  state = {
       results: null,
       searchKey: "",
       searchTerm: DEFAULT_QUERY,
       hitsPerPage: DEFAULT_HPP,
       error: null,
     }
-
-    this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this)
-    this.setSearchTopStories = this.setSearchTopStories.bind(this)
-    this.onSearchChange = this.onSearchChange.bind(this)
-    this.onHppChange = this.onHppChange.bind(this)
-    this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this)
-    this.onSearchSubmit = this.onSearchSubmit.bind(this)
-    this.onDismiss = this.onDismiss.bind(this)
-  }
-
-  needsToSearchTopStories(searchTerm) {
-    return !this.state.results[searchTerm]
-  }
-
-  onSearchSubmit(event) {
-    const {searchTerm,hitsPerPage} = this.state
-    
-    this.setState({searchKey: searchTerm})
-    
-    if (this.needsToSearchTopStories(searchTerm)) {
-      this.fetchSearchTopStories(searchTerm, hitsPerPage)
-    }
-    
-    event.preventDefault()
-  }
-
-  onSearchChange(event) {
-    this.setState({
-      searchTerm: event.target.value
-    })
-  }
-
-  onHppChange(event) {
-    this.setState({
-      hitsPerPage: event.target.value
-    })
-  }
-
-  setSearchTopStories(founded) {
-    const { hits, page } = founded
-    const { searchKey, results } = this.state
-    const oldHits =
-      (results && results[searchKey] && results[searchKey].hits) || []
-    const newHits = [...oldHits, ...hits]
-
-    this.updateStateResults(results, searchKey, newHits, page)
-  }
-
-  componentDidMount() {
-
-    this._isMounted = true
-
-    const { searchTerm, hitsPerPage } = this.state
-    this.setState({
-      searchKey: searchTerm
-    })
-    this.fetchSearchTopStories(searchTerm, hitsPerPage)
-  }
-
-  componentWillUnmount(){
-    this._isMounted = false
-  }
-
-  fetchSearchTopStories(term, hitsPerPage, page = 0) {
-    axios.get(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${term}&${PARAM_PAGE}${page}&${PARAM_HPP}${hitsPerPage}`)
-      .then(result => this._isMounted && this.setSearchTopStories(result.data))
-      .catch(error => this._isMounted && this.setState({ error }))
-  }
 
   render() {
     const { searchTerm, results, searchKey, hitsPerPage, error } = this.state
@@ -130,7 +59,21 @@ class App extends Component {
     )
   }
 
-  onDismiss(id) {
+  componentDidMount() {
+    this._isMounted = true
+
+    const { searchTerm, hitsPerPage } = this.state
+    this.setState({
+      searchKey: searchTerm
+    })
+    this.fetchSearchTopStories(searchTerm, hitsPerPage)
+  }
+
+  componentWillUnmount(){
+    this._isMounted = false
+  }
+
+  onDismiss = (id) => {
     const { searchKey, results } = this.state
     const { hits, page } = results && results[searchKey]
     const isNotId = item => item.objectID !== id
@@ -138,7 +81,31 @@ class App extends Component {
     this.updateStateResults(results, searchKey, updatedHits, page)
   }
 
-  updateStateResults(results, searchKey, updatedHits, page) {
+  onSearchSubmit = (event) => {
+    const {searchTerm,hitsPerPage} = this.state
+    
+    this.setState({searchKey: searchTerm})
+    
+    if (this.needsToSearchTopStories(searchTerm)) {
+      this.fetchSearchTopStories(searchTerm, hitsPerPage)
+    }
+    
+    event.preventDefault()
+  }
+
+  onSearchChange = (event) => {
+    this.setState({
+      searchTerm: event.target.value
+    })
+  }
+
+  onHppChange = (event) => {
+    this.setState({
+      hitsPerPage: event.target.value
+    })
+  }
+
+  updateStateResults= (results, searchKey, updatedHits, page) => {
     this.setState({
       results: {
         ...results,
@@ -149,6 +116,26 @@ class App extends Component {
       }
     })
   }
+
+  needsToSearchTopStories = (searchTerm) => {
+    return !this.state.results[searchTerm]
+  }
+  setSearchTopStories = (founded) => {
+    const { hits, page } = founded
+    const { searchKey, results } = this.state
+    const oldHits =
+      (results && results[searchKey] && results[searchKey].hits) || []
+    const newHits = [...oldHits, ...hits]
+
+    this.updateStateResults(results, searchKey, newHits, page)
+  }
+
+  fetchSearchTopStories = (term, hitsPerPage, page = 0) => {
+    axios.get(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${term}&${PARAM_PAGE}${page}&${PARAM_HPP}${hitsPerPage}`)
+      .then(result => this._isMounted && this.setSearchTopStories(result.data))
+      .catch(error => this._isMounted && this.setState({ error }))
+  }
+
 }
 
 export default App
