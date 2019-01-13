@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 const Search = ({ value, hitsPerPage, onChange, onHppChange, onSubmit, children }) => (
   <form onSubmit={onSubmit}>
@@ -7,6 +7,6 @@ const Search = ({ value, hitsPerPage, onChange, onHppChange, onSubmit, children 
     <input style={{width: 20}} type="text" value={hitsPerPage} onChange={onHppChange} />
     <button type="submit">{children}</button>
   </form>
-);
+)
 
-export default Search;
+export default Search

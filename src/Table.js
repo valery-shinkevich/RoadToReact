@@ -3,21 +3,21 @@ import Button from './Button'
 
 const largeColumn = {
     width: '40%',
-};
+}
 
 const midColumn = {
     width: '30%',
-};
+}
 
 const smallColumn = {
     width: '10%',
-};
+}
 
 const Table = ({list, onDismiss}) => 
     <div className="table">{
         list
             .map(item => {
-            const onHandleDismiss = () => onDismiss(item.objectID);
+            const onHandleDismiss = () => onDismiss(item.objectID)
             return (
             <div key={item.objectID} className="table-row">
                 <span style= {largeColumn}>
@@ -32,7 +32,7 @@ const Table = ({list, onDismiss}) =>
                     <Button onClick={onHandleDismiss} className="button-inline">X</Button>
                 </span>
             </div>
-            );
+            )
         })
     }
     </div>
