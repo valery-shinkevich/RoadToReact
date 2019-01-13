@@ -21,7 +21,8 @@ class App extends Component {
       results: null,
       searchKey: "",
       searchTerm: DEFAULT_QUERY,
-      hitsPerPage: DEFAULT_HPP
+      hitsPerPage: DEFAULT_HPP,
+      error: null,
     }
 
     this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this)
@@ -78,18 +79,17 @@ class App extends Component {
     })
     this.fetchSearchTopStories(searchTerm, hitsPerPage)
   }
-
-  fetchSearchTopStories(term, hitsPerPage, page = 0) {
-    fetch(
+fetchSearchTopStories(term, hitsPerPage, page = 0) {
+  fetch(
       `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${term}&${PARAM_PAGE}${page}&${PARAM_HPP}${hitsPerPage}`
     )
-      .then(response => response.json())
-      .then(result => this.setSearchTopStories(result))
-      .catch(error => error)
-  }
+    .then(response => response.json())
+    .then(result => this.setSearchTopStories(result))
+    .catch(error => this.setState({ error }))
+}
 
   render() {
-    const { searchTerm, results, searchKey, hitsPerPage } = this.state
+    const { searchTerm, results, searchKey, hitsPerPage, error } = this.state
     const resultByKey = results && results[searchKey]
     const page = (resultByKey && resultByKey.page) || 0
     const list = (resultByKey && resultByKey.hits) || []
@@ -107,16 +107,16 @@ class App extends Component {
             Поиск
           </Search>
         </div>
-        {list && <Table list={list} onDismiss={this.onDismiss} />}
-        <div className="interactions">
-          <Button
-            onClick={() =>
-              this.fetchSearchTopStories(searchKey, hitsPerPage, page + 1)
-            }
-          >
-            Больше историй
-          </Button>
-        </div>
+        { error
+          ? <div className="interactions"><p>Что-то пошло не так...</p></div>
+          : <Table list={list} onDismiss={this.onDismiss} />}
+            <div className="interactions">
+              <Button
+                onClick={() => this.fetchSearchTopStories(searchKey, hitsPerPage, page + 1)}
+              >
+              Больше историй
+              </Button>
+            </div>
       </div>
     )
   }
