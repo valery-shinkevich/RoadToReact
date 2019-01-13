@@ -1,10 +1,10 @@
 import React, { Component } from "react"
 import axios from 'axios'
 import "./App.css"
-import Search from "./Search"
-import Table from "./Table"
-import Button from "./Button"
-import { DEFAULT_QUERY, DEFAULT_HPP, PATH_BASE, PATH_SEARCH, PARAM_SEARCH, PARAM_PAGE, PARAM_HPP } from "./Defenitions";
+import Search from "../Search"
+import Table from "../Table"
+import Button from "../Buttons"
+import { DEFAULT_QUERY, DEFAULT_HPP, PATH_BASE, PATH_SEARCH, PARAM_SEARCH, PARAM_PAGE, PARAM_HPP } from "../../constants";
 
 class App extends Component {
 
