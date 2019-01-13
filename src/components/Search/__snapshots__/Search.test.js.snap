@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Search есть корректный снимок 1`] = `
+<form>
+  <input
+    type="text"
+  />
+  Строк на странице:
+  <input
+    style={
+      Object {
+        "width": 20,
+      }
+    }
+    type="text"
+  />
+  <button
+    type="submit"
+  >
+    Поиск
+  </button>
+</form>
+`;
