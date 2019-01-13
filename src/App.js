@@ -105,21 +105,16 @@ class App extends Component {
     })
   }
 
-  updateStateResults= (results, searchKey, updatedHits, page) => {
-    this.setState({
-      results: {
-        ...results,
-        [searchKey]: {
-          hits: updatedHits,
-          page
-        }
-      }
-    })
-  }
-
   needsToSearchTopStories = (searchTerm) => {
     return !this.state.results[searchTerm]
   }
+
+  fetchSearchTopStories = (term, hitsPerPage, page = 0) => {
+    axios.get(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${term}&${PARAM_PAGE}${page}&${PARAM_HPP}${hitsPerPage}`)
+      .then(result => this._isMounted && this.setSearchTopStories(result.data))
+      .catch(error => this._isMounted && this.setState({ error }))
+  }
+
   setSearchTopStories = (founded) => {
     const { hits, page } = founded
     const { searchKey, results } = this.state
@@ -130,12 +125,17 @@ class App extends Component {
     this.updateStateResults(results, searchKey, newHits, page)
   }
 
-  fetchSearchTopStories = (term, hitsPerPage, page = 0) => {
-    axios.get(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${term}&${PARAM_PAGE}${page}&${PARAM_HPP}${hitsPerPage}`)
-      .then(result => this._isMounted && this.setSearchTopStories(result.data))
-      .catch(error => this._isMounted && this.setState({ error }))
+  updateStateResults = (results, searchKey, updatedHits, page) => {
+    this.setState({
+      results: {
+        ...results,
+        [searchKey]: {
+          hits: updatedHits,
+          page
+        }
+      }
+    })
   }
-
 }
 
 export default App
