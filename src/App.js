@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import axios from 'axios'
 import "./App.css"
 import Search from "./Search"
 import Table from "./Table"
@@ -14,6 +15,9 @@ const PARAM_PAGE = "page="
 const PARAM_HPP = "hitsPerPage="
 
 class App extends Component {
+
+  _isMounted = false
+
   constructor(props) {
     super(props)
 
@@ -73,20 +77,25 @@ class App extends Component {
   }
 
   componentDidMount() {
+
+    this._isMounted = true
+
     const { searchTerm, hitsPerPage } = this.state
     this.setState({
       searchKey: searchTerm
     })
     this.fetchSearchTopStories(searchTerm, hitsPerPage)
   }
-fetchSearchTopStories(term, hitsPerPage, page = 0) {
-  fetch(
-      `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${term}&${PARAM_PAGE}${page}&${PARAM_HPP}${hitsPerPage}`
-    )
-    .then(response => response.json())
-    .then(result => this.setSearchTopStories(result))
-    .catch(error => this.setState({ error }))
-}
+
+  componentWillUnmount(){
+    this._isMounted = false
+  }
+
+  fetchSearchTopStories(term, hitsPerPage, page = 0) {
+    axios.get(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${term}&${PARAM_PAGE}${page}&${PARAM_HPP}${hitsPerPage}`)
+      .then(result => this._isMounted && this.setSearchTopStories(result.data))
+      .catch(error => this._isMounted && this.setState({ error }))
+  }
 
   render() {
     const { searchTerm, results, searchKey, hitsPerPage, error } = this.state
