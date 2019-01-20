@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom'
 import renderer from 'react-test-renderer'
 import Table  from './Table'
 
+import Enzyme, { shallow } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+Enzyme.configure({adapter: new Adapter()})
+
 describe('Button', () => {
 
   const props = {
@@ -11,8 +15,8 @@ describe('Button', () => {
     { title: '2', author: '2', num_comments: 1, points: 2, objectID: 'z' },
     ],
     }
-    
-  it('отрисовывает без ошибки', () => {
+
+    it('отрисовывает без ошибки', () => {
     const div = document.createElement('div')
     ReactDOM.render(<Table {...props}/>, div)
     ReactDOM.unmountComponentAtNode(div)
@@ -24,6 +28,14 @@ describe('Button', () => {
     )
     const tree = component.toJSON()
     expect(tree).toMatchSnapshot()
+  })
+
+  it('Отображает два элемента списка', () => {
+    const element = shallow(
+      <Table {...props} />
+    )
+
+    expect(element.find('.table-row').length).toBe(2)
   })
 
 })
