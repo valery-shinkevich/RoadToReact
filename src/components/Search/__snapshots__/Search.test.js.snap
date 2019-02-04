@@ -1,18 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Search есть корректный снимок 1`] = `
-<form>
+<form
+  onSubmit={[Function]}
+>
   <input
+    onChange={[Function]}
     type="text"
   />
   Строк на странице:
   <input
+    onChange={[Function]}
     style={
       Object {
         "width": 20,
       }
     }
     type="text"
+    value={5}
   />
   <button
     type="submit"

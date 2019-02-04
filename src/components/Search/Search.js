@@ -1,4 +1,5 @@
 import React from "react"
+import PropTypes from 'prop-types'
 
 const Search = ({ value, hitsPerPage, onChange, onHppChange, onSubmit, children }) => (
   <form onSubmit={onSubmit}>
@@ -8,5 +9,18 @@ const Search = ({ value, hitsPerPage, onChange, onHppChange, onSubmit, children 
     <button type="submit">{children}</button>
   </form>
 )
+
+Search.defaultProps = {
+  hitsPerPage: 5
+}
+
+Search.propTypes = {
+  value: PropTypes.string,
+  hitsPerPage: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onHppChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  children:PropTypes.node.isRequired,
+}
 
 export default Search
